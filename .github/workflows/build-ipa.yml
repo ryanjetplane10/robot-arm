@@ -1,8 +1,0 @@
-- name: Install xcodegen
-        run: |
-          curl -L -o xcodegen.zip https://github.com/yonaskolb/XcodeGen/releases/latest/download/xcodegen.zip
-          unzip -q xcodegen.zip -d xcodegen_extracted
-          sudo cp xcodegen_extracted/bin/xcodegen /usr/local/bin/xcodegen
-          sudo mkdir -p /usr/local/share/xcodegen
-          sudo cp -r xcodegen_extracted/share/xcodegen/. /usr/local/share/xcodegen/
-          xcodegen --version
