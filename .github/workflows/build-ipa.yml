@@ -1,0 +1,17 @@
+- name: Install xcodegen
+        run: |
+          curl -L -o xcodegen.zip https://github.com/yonaskolb/XcodeGen/releases/latest/download/xcodegen.zip
+          unzip -q xcodegen.zip -d xcodegen_extracted
+          find xcodegen_extracted -type f
+          BIN_PATH=$(find xcodegen_extracted -type f -name xcodegen -perm -u+x | head -n 1)
+          if [ -z "$BIN_PATH" ]; then
+            BIN_PATH=$(find xcodegen_extracted -type f -name xcodegen | head -n 1)
+          fi
+          sudo cp "$BIN_PATH" /usr/local/bin/xcodegen
+          sudo chmod +x /usr/local/bin/xcodegen
+          SHARE_DIR=$(dirname "$BIN_PATH")/../share/xcodegen
+          if [ -d "$SHARE_DIR" ]; then
+            sudo mkdir -p /usr/local/share/xcodegen
+            sudo cp -r "$SHARE_DIR/." /usr/local/share/xcodegen/
+          fi
+          xcodegen --version
