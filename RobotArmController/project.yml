@@ -1,0 +1,23 @@
+name: RobotArmController
+options:
+  bundleIdPrefix: com.robotarm
+targets:
+  RobotArmController:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources: [Sources]
+    resources: [Resources]
+    info:
+      path: Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.robotarm.controller
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+schemes:
+  RobotArmController:
+    build:
+      targets:
+        RobotArmController: all
