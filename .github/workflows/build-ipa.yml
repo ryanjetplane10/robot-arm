@@ -1,4 +1,16 @@
-- name: Install xcodegen
+name: Build IPA
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
         run: |
           curl -L -o xcodegen.zip https://github.com/yonaskolb/XcodeGen/releases/latest/download/xcodegen.zip
           unzip -q xcodegen.zip -d xcodegen_extracted
@@ -15,3 +27,29 @@
             sudo cp -r "$SHARE_DIR/." /usr/local/share/xcodegen/
           fi
           xcodegen --version
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app (unsigned)
+        run: |
+          xcodebuild -project RobotArmController.xcodeproj \
+            -scheme RobotArmController \
+            -configuration Release \
+            -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -derivedDataPath build \
+            build
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/RobotArmController.app Payload/
+          zip -r RobotArmController.ipa Payload
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RobotArmController-ipa
+          path: RobotArmController.ipa
